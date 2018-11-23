@@ -32,8 +32,8 @@ Vagrant.configure("2") do |config|
         server2.vm.hostname = "server2"
         server2.vm.network "private_network", ip: "192.168.0.11"
         server2.vm.provision "shell", inline: <<-SHELL
-          sudo  echo "192.168.0.10 server1" >> /etc/hosts
-          sudo yum install -y mc
+          echo "192.168.0.10 server1" >> /etc/hosts
+          yum install -y mc
         SHELL
     end
     
