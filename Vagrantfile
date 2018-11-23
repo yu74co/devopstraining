@@ -13,16 +13,16 @@ Vagrant.configure("2") do |config|
           yum install -y mc git
 #          mkdir /home/vagrant/git_dir
 #          cd /home/vagrant/git_dir
-          git clone https://github.com/yu74co/devopstraining.git
+          git clone -b task2 https://github.com/yu74co/devopstraining.git
           cd ./devopstraining
           git config user.name "Yury Semchanka"
           git config user.email "sem.y@tut.by"
-          git checkout task2
+#          git checkout task2
           cat Task2_file
         SHELL
         server1.vm.provision "file", source: "Vagrantfile", destination: "Vagrantfile"
         server1.vm.provision "shell", inline: <<-SHELL
-          sudo cp Vagrantfile ./devopstraining/
+          sudo cp -f Vagrantfile ./devopstraining/
           cd devopstraining
           git add Vagrantfile
         SHELL
