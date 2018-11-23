@@ -9,10 +9,10 @@ Vagrant.configure("2") do |config|
         server1.vm.network "private_network", ip: "192.168.0.10"
         server1.vm.provision "shell", inline: <<-SHELL
 #      sudo yum update -y
-          sudo  echo "192.168.0.11 server2" >> /etc/hosts
-          sudo yum install -y mc git
-          mkdir /home/vagrant/git_dir
-          cd /home/vagrant/git_dir
+          echo "192.168.0.11 server2" >> /etc/hosts
+          yum install -y mc git
+#          mkdir /home/vagrant/git_dir
+#          cd /home/vagrant/git_dir
           git clone https://github.com/yu74co/devopstraining.git
           cd ./devopstraining
           git config user.name "Yury Semchanka"
@@ -22,8 +22,8 @@ Vagrant.configure("2") do |config|
         SHELL
         server1.vm.provision "file", source: "Vagrantfile", destination: "Vagrantfile"
         server1.vm.provision "shell", inline: <<-SHELL
-          sudo cp Vagrantfile ./git_dir/devopstraining/
-          cd git_dir/devopstraining/
+          sudo cp Vagrantfile ./devopstraining/
+          cd devopstraining
           git add Vagrantfile
         SHELL
     end
