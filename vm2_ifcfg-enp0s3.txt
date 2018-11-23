@@ -1,0 +1,34 @@
+[root@vm2 ~]# cat /etc/sysconfig/network-scripts/ifcfg-enp0s3
+HWADDR=08:00:27:7C:2C:76
+TYPE=Ethernet
+PROXY_METHOD=none
+BROWSER_ONLY=no
+BOOTPROTO=dhcp
+DEFROUTE=yes
+IPV4_FAILURE_FATAL=no
+IPV6INIT=no
+IPV6_AUTOCONF=yes
+IPV6_DEFROUTE=yes
+IPV6_FAILURE_FATAL=no
+IPV6_ADDR_GEN_MODE=stable-privacy
+NAME=enp0s3
+UUID=da03f875-8ae7-3ca1-bd17-cf77602c0bf1
+ONBOOT=no
+AUTOCONNECT_PRIORITY=-999
+[root@vm2 ~]# ping google.com
+PING google.com (172.217.16.14) 56(84) bytes of data.
+64 bytes from waw02s13-in-f14.1e100.net (172.217.16.14): icmp_seq=1 ttl=51 time=40.2 ms
+64 bytes from waw02s13-in-f14.1e100.net (172.217.16.14): icmp_seq=2 ttl=51 time=40.2 ms
+64 bytes from waw02s13-in-f14.1e100.net (172.217.16.14): icmp_seq=3 ttl=51 time=40.2 ms
+^C
+--- google.com ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2003ms
+rtt min/avg/max/mdev = 40.205/40.219/40.242/0.016 ms
+[root@vm2 ~]# curl http://tut.by
+<html>
+<head><title>301 Moved Permanently</title></head>
+<body bgcolor="white">
+<center><h1>301 Moved Permanently</h1></center>
+<hr><center>nginx</center>
+</body>
+</html>

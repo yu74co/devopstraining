@@ -1,0 +1,19 @@
+[root@vm1 ~]# cat /etc/sysconfig/network-scripts/ifcfg-enp0s8
+TYPE=Ethernet
+PROXY_METHOD=none
+BROWSER_ONLY=no
+BOOTPROTO=none
+DEFROUTE=no
+IPV4_FAILURE_FATAL=no
+IPV6INIT=no
+IPV6_AUTOCONF=yes
+IPV6_DEFROUTE=yes
+IPV6_FAILURE_FATAL=no
+IPV6_ADDR_GEN_MODE=stable-privacy
+NAME=enp0s8
+UUID=0c853cd8-8882-42dd-a93d-c614c9aaa846
+DEVICE=enp0s8
+ONBOOT=yes
+IPADDR=192.168.15.5
+PREFIX=24
+ZONE=internal

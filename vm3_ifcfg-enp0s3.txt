@@ -1,0 +1,17 @@
+[root@vm3 network-scripts]# cat /etc/sysconfig/network-scripts/ifcfg-enp0s3
+HWADDR=08:00:27:70:24:94
+TYPE=Ethernet
+PROXY_METHOD=none
+BROWSER_ONLY=no
+BOOTPROTO=dhcp
+DEFROUTE=yes
+IPV4_FAILURE_FATAL=no
+IPV6INIT=yes
+IPV6_AUTOCONF=yes
+IPV6_DEFROUTE=yes
+IPV6_FAILURE_FATAL=no
+IPV6_ADDR_GEN_MODE=stable-privacy
+NAME=enps03
+UUID=3c8798ab-e2d8-39f4-87f0-2e239a17cbc0
+ONBOOT=no
+AUTOCONNECT_PRIORITY=-999

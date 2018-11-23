@@ -1,0 +1,12 @@
+ firewall-cmd --permanent --zone=internal --add-interface=enp0s8
+ firewall-cmd --permanent --add-masquerade
+ firewall-cmd --direct --permanent --add-rule ipv4 filter FORWARD 0 -s 192.168.15.6/32 -o enp0s3 -j ACCEPT
+ firewall-cmd --direct --permanent --add-rule ipv4 filter FORWARD 0 -i enp0s3 -o enp0s8 -m state --state RELATED,ESTABLISHED -j ACCEPT
+ firewall-cmd --direct --permanent --add-rule ipv4 filter FORWARD 0 -j DROP
+ systemctl restart firewalld
+ 
+ 
+ [root@vm1 network-scripts]# firewall-cmd --direct --get-all-rules
+ipv4 filter FORWARD 0 -i enp0s3 -o enp0s8 -m state --state RELATED,ESTABLISHED -j ACCEPT
+ipv4 filter FORWARD 0 -s 192.168.15.6/32 -o enp0s3 -j ACCEPT
+ipv4 filter FORWARD 0 -j DROP

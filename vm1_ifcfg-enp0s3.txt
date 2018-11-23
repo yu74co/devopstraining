@@ -1,0 +1,17 @@
+[root@vm1 ~]# cat /etc/sysconfig/network-scripts/ifcfg-enp0s3
+TYPE="Ethernet"
+PROXY_METHOD="none"
+BROWSER_ONLY="no"
+BOOTPROTO="dhcp"
+DEFROUTE="yes"
+IPV4_FAILURE_FATAL="no"
+IPV6INIT="no"
+IPV6_AUTOCONF="yes"
+IPV6_DEFROUTE="yes"
+IPV6_FAILURE_FATAL="no"
+IPV6_ADDR_GEN_MODE="stable-privacy"
+NAME="enp0s3"
+UUID="816a5e4c-575e-46f1-99dc-aee4f238ec78"
+DEVICE="enp0s3"
+ONBOOT="yes"
+ZONE=public
