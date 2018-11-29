@@ -1,0 +1,39 @@
+apply plugin: 'java'
+
+//mainClassName = 'hello.HelloWorld'
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+// tag::jar[]
+
+//version =  '1.1.1'
+task incrementVersion {
+    def buildFile = 'build/lib/*"
+    def v=buildFile.getText().find(version) //get this build file's text and extract the version value
+    String minor=v.substring(v.lastIndexOf('.')+1) //get last digit
+    int m=minor.toInteger()+1                      //increment
+    String major=v.substring(0,v.length()-1)       //get the beginning
+    //println m
+    String s=buildFile.getText().replaceFirst("version='$version'","version='"+major+m+"'")
+    //println s
+    buildFile.setText(s) //replace the build file's text
+}
+println {'version'}
+//jar {
+//    baseName = 'sample-app'
+//    version'${version}'
+//}
+// end::jar[]
+
+// tag::dependencies[]
+
+
+dependencies {
+//  compile group: 'org.apache.logging.log4j', name: 'log4j', version: '1.2.17'
+  compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.11.1'
+  compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.11.1'
+  compile group: 'commons-io', name: 'commons-io', version: '2.5'
+}
