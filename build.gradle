@@ -6,26 +6,24 @@ repositories {
     mavenCentral()
 }
 
-println version
+jar {
+    baseName = 'sample-app'
+}
+
+
+println "Previous version is "+version+""
 task incrementVersion {
-    def v=version //get this build file's text and extract the version value
-    String minor=v.substring(v.lastIndexOf('.')+1) //get last digit
+    def v=version 
+    String minor=v.substring(v.lastIndexOf('.')+1) 
     int m=minor.toInteger()+1                      //increment
-    String major=v.substring(0,v.length()-1)       //get the beginning
-    println m
+    String major=v.take(v.lastIndexOf('.')+1)
+    //println major
+    //println m
     String s="version="+major+m+""
-    
-    println s
-    version=major+m
+    println "New "+s+""
     File file = new File("gradle.properties")
     file.write s
     //greetingFile.setText(s) //replace the build file's text
-}
-println {'version'}
-jar {
-    baseName = 'sample-app'
-    //version = k //incrementVersion(major+m)
-    //println s
 }
 
 
