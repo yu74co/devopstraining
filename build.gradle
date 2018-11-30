@@ -23,7 +23,13 @@ task incrementVersion {
     println "New "+s+""
     File file = new File("gradle.properties")
     file.write s
-    //greetingFile.setText(s) //replace the build file's text
+
+}
+
+task populate {
+    Date date = new Date()
+    File file = new File("build/greetings.txt")
+    file << "Version  ${version}  at  ${date} \n"
 }
 
 
