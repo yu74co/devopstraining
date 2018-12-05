@@ -1,7 +1,7 @@
 plugins {
     id 'java'
     id 'war'
-    id 'org.gretty' version '2.2.0'
+//    id 'org.gretty' version '2.2.0'
 }
 
 
@@ -15,7 +15,7 @@ repositories {
 
 println "Previous version is "+version+""
 task incrementVersion {
-    dependsOn build
+//    dependsOn build
     doLast {
         def v=version 
         String minor=v.substring(v.lastIndexOf('.')+1) 
@@ -36,10 +36,15 @@ task populate {
     doLast {
         Date date = new Date()
         println date
-        File file = new File("build/resources/main/greeting.txt")
-        file << "\nVersion  ${version} generated at  ${date} \n"
+        File file = new File("build/resources/main/greetings.txt")
+        file << "Version  ${version} generated at  ${date} \n"
         println file
     }
+}
+
+war {
+    from 'build/resources/main' // adds a file-set to the root of the archive
+        webInf { from 'build/resources/main/greetings.txt' } // adds a file-set to the WEB-INF dir.
 }
 
 
