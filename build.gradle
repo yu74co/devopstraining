@@ -11,15 +11,6 @@ repositories {
     mavenCentral()
 }
 
-gretty {
-//    port = 8080
-    contextPath = '/'
-    servletContainer = 'jetty9'
-}
-
-//war {
-//    baseName = 'sample'
-//}
 
 
 println "Previous version is "+version+""
