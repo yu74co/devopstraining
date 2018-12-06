@@ -13,9 +13,8 @@ repositories {
 
 
 
-println "Previous version is "+version+""
+println "Current version is "+version+""
 task incrementVersion {
-//    dependsOn build
     doLast {
         def v=version 
         String minor=v.substring(v.lastIndexOf('.')+1) 
@@ -32,19 +31,19 @@ task incrementVersion {
 }
 
 task populate {
-    dependsOn incrementVersion
-    doLast {
+//    dependsOn incrementVersion
+//    doLast {
         Date date = new Date()
         println date
         File file = new File("build/resources/main/greetings.txt")
-        file << "Version  ${version} generated at  ${date} \n"
+        file << "Version  ${version} planed at  ${date} \n"
         println file
-    }
+//    }
 }
 
 war {
     from 'build/resources/main' // adds a file-set to the root of the archive
-        webInf { from 'build/resources/main/greetings.txt' } // adds a file-set to the WEB-INF dir.
+    webInf { from 'build/resources/main/greetings.txt' } // adds a file-set to the WEB-INF dir.
 }
 
 
@@ -53,7 +52,7 @@ dependencies {
   compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.11.1'
   compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.11.1'
   providedCompile 'javax.servlet:javax.servlet-api:3.1.0' 
-  providedCompile	'org.apache.tomcat:tomcat-servlet-api:7.0.37'
+  providedCompile 'org.apache.tomcat:tomcat-servlet-api:7.0.37'
   testCompile 'junit:junit:4.12'
   compile group: 'commons-io', name: 'commons-io', version: '2.5'
 }
