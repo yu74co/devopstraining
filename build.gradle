@@ -12,7 +12,6 @@ repositories {
 }
 
 
-
 println "Current version is "+version+""
 task incrementVersion {
     doLast {
@@ -27,25 +26,19 @@ task incrementVersion {
         File file = new File("gradle.properties")
         file.write s
     }
-
 }
 
-task populate {
-//    dependsOn incrementVersion
-//    doLast {
+
+
+sourceSets.main.java.srcDirs = ['build/resources/main']
+task populate  {
         Date date = new Date()
         println date
+        mkdir "build/resources/main"
         File file = new File("build/resources/main/greetings.txt")
-        file << "Version  ${version} planed at  ${date} \n"
+        file << "${date} version ${version}\n"
         println file
-//    }
 }
-
-war {
-    from 'build/resources/main' // adds a file-set to the root of the archive
-    webInf { from 'build/resources/main/greetings.txt' } // adds a file-set to the WEB-INF dir.
-}
-
 
 dependencies {
 //  compile group: 'org.apache.logging.log4j', name: 'log4j', version: '1.2.17'
@@ -54,5 +47,6 @@ dependencies {
   providedCompile 'javax.servlet:javax.servlet-api:3.1.0' 
   providedCompile 'org.apache.tomcat:tomcat-servlet-api:7.0.37'
   testCompile 'junit:junit:4.12'
+  //compile project(":Task4")
   compile group: 'commons-io', name: 'commons-io', version: '2.5'
 }
