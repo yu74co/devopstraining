@@ -29,16 +29,25 @@ task incrementVersion {
 }
 
 
-
-sourceSets.main.java.srcDirs = ['build/resources/main']
-task populate  {
+task populate   {
+    dependsOn classes
+    doLast {
         Date date = new Date()
         println date
-        mkdir "build/resources/main"
         File file = new File("build/resources/main/greetings.txt")
         file << "${date} version ${version}\n"
-        println file
+    }
 }
+
+build {
+dependsOn populate,war
+}
+
+war {
+mustRunAfter populate
+}
+
+
 
 dependencies {
 //  compile group: 'org.apache.logging.log4j', name: 'log4j', version: '1.2.17'
@@ -46,7 +55,7 @@ dependencies {
   compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.11.1'
   providedCompile 'javax.servlet:javax.servlet-api:3.1.0' 
   providedCompile 'org.apache.tomcat:tomcat-servlet-api:7.0.37'
-  testCompile 'junit:junit:4.12'
+//  testCompile 'junit:junit:4.12'
   //compile project(":Task4")
   compile group: 'commons-io', name: 'commons-io', version: '2.5'
 }
