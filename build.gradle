@@ -35,9 +35,11 @@ task populate   {
         println date
         File file = new File("build/resources/main/greeting.txt")
         file << "\n${date} version ${version}"
+    }
 }
 
 war.dependsOn populate 
+
 
 
 dependencies {
