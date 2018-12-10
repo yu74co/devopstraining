@@ -30,25 +30,14 @@ task incrementVersion {
 
 
 task populate   {
-    dependsOn classes
     doLast {
         Date date = new Date()
         println date
-        File file = new File("build/resources/main/greetings.txt")
-        file << "${date} version ${version}\n"
-    }
+        File file = new File("build/resources/main/greeting.txt")
+        file << "\n${date} version ${version}"
 }
 
 war.dependsOn populate 
-
-//build {
-//dependsOn populate,war
-//}
-
-//war {
-//mustRunAfter populate
-//}
-
 
 
 dependencies {
