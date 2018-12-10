@@ -39,13 +39,15 @@ task populate   {
     }
 }
 
-build {
-dependsOn populate,war
-}
+war.dependsOn populate 
 
-war {
-mustRunAfter populate
-}
+//build {
+//dependsOn populate,war
+//}
+
+//war {
+//mustRunAfter populate
+//}
 
 
 
