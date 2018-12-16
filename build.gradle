@@ -1,41 +1,54 @@
-apply plugin: 'java'
+plugins {
+    id 'java'
+    id 'war'
+//    id 'org.gretty' version '2.2.0'
+}
 
 
 repositories {
+    jcenter()
     mavenLocal()
     mavenCentral()
 }
 
-jar {
-    baseName = 'sample-app'
-}
 
-
-println "Previous version is "+version+""
+println "Current version is "+version+""
 task incrementVersion {
-    def v=version 
-    String minor=v.substring(v.lastIndexOf('.')+1) 
-    int m=minor.toInteger()+1                      //increment
-    String major=v.take(v.lastIndexOf('.')+1)
-    //println major
-    //println m
-    String s="version="+major+m+""
-    println "New "+s+""
-    File file = new File("gradle.properties")
-    file.write s
-
+    doLast {
+        def v=version 
+        String minor=v.substring(v.lastIndexOf('.')+1) 
+        int m=minor.toInteger()+1                      //increment
+        String major=v.take(v.lastIndexOf('.')+1)
+        //println major
+        //println m
+        String s="version="+major+m+""
+        println "Next "+s+""
+        File file = new File("gradle.properties")
+        file.write s
+    }
 }
 
-task populate {
-    Date date = new Date()
-    File file = new File("build/greetings.txt")
-    file << "Version  ${version}  at  ${date} \n"
+
+task populate   {
+    doLast {
+        Date date = new Date()
+        println date
+        File file = new File("build/resources/main/greeting.txt")
+        file << "\n${date} version ${version}"
+    }
 }
+
+war.dependsOn populate 
+
 
 
 dependencies {
 //  compile group: 'org.apache.logging.log4j', name: 'log4j', version: '1.2.17'
   compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.11.1'
   compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.11.1'
+  providedCompile 'javax.servlet:javax.servlet-api:3.1.0' 
+  providedCompile 'org.apache.tomcat:tomcat-servlet-api:7.0.37'
+//  testCompile 'junit:junit:4.12'
+  //compile project(":Task4")
   compile group: 'commons-io', name: 'commons-io', version: '2.5'
 }
