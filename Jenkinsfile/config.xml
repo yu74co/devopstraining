@@ -43,12 +43,15 @@
                         ./gradlew incrementVersion
                         ./gradlew build
                         export ver=$(cat gradle.properties | grep version= | sed &apos;s/version=//&apos;)
-                        #export $ver
                         curl -XPUT -u admin:admin123 -T build/libs/devopstraining-$ver.war http://server1:8081/nexus/content/repositories/snapshots/task6/$ver/test.war
-                        echo $ver &gt; ../../ver.tmp
+                        
                     &apos;&apos;&apos;
-                    script {
-                    VERs = readFile(&apos;../ver.tmp&apos;)
+                    script { 
+                    VERs = readFile(&apos;./devopstraining/gradle.properties&apos;)
+                    String version=VERs.drop(VERs.lastIndexOf(&apos;=&apos;)+1)
+                    echo &quot;${VERs}!&quot;
+                    echo &quot;${version}&quot;
+                    env.ver = &quot;${version}&quot;
                     }
                 }
                 
@@ -57,13 +60,11 @@
         
         stage(&apos;Deploy1&apos;) {
             steps {
-                echo &quot;${VERs}&quot;
                 node(&apos;tomcat1&apos;){
-                    sh &apos;rm -rf *&apos;
-                    writeFile file: &quot;ver.tmp&quot;, text: &quot;${VERs}&quot;
                     
                     sh &apos;&apos;&apos;
-                        ver=$(cat ver.tmp)
+                        rm -rf *
+                        echo $ver
                         wget http://server1:8081/nexus/content/repositories/snapshots/task6/$ver/test.war
                         curl http://server1/jkmanager?cmd=update&amp;from=list&amp;w=lb&amp;sw=server2&amp;vwa=1
                         cp test.war /var/lib/tomcat/webapps
@@ -77,13 +78,9 @@
         
         stage(&apos;Deploy2&apos;) {
             steps {
-                echo &quot;${VERs}&quot;
                 node(&apos;tomcat2&apos;){
-                    sh &apos;rm -rf *&apos;
-                    writeFile file: &quot;ver.tmp&quot;, text: &quot;${VERs}&quot;
-                    
                     sh &apos;&apos;&apos;
-                        ver=$(cat ver.tmp)
+                        rm -rf *
                         wget http://server1:8081/nexus/content/repositories/snapshots/task6/$ver/test.war
                         curl http://server1/jkmanager?cmd=update&amp;from=list&amp;w=lb&amp;sw=server3&amp;vwa=1
                         cp test.war /var/lib/tomcat/webapps
@@ -107,7 +104,6 @@
                     git checkout master
                     git merge task6
                     git push
-                    ver=$(cat ../../ver.tmp)
                     git tag -a $ver -m &apos;version&apos;
                     git push origin $ver
                     &apos;&apos;&apos;
