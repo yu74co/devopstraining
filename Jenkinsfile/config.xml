@@ -10,7 +10,6 @@
     </org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction>
   </actions>
   <description></description>
-  <displayName>TASK6</displayName>
   <keepDependencies>false</keepDependencies>
   <properties>
     <org.jenkinsci.plugins.workflow.job.properties.DisableConcurrentBuildsJobProperty/>
@@ -24,7 +23,7 @@
                 node(&apos;master&apos;){
                     sh &apos;&apos;&apos;
                     rm -rf *
-                    git clone -b task6 git@github.com:yu74co/devopstraining.git
+                    git clone -b task7 git@github.com:yu74co/devopstraining.git
                     cd devopstraining
                     git add *
                     git config user.email &quot;sem.y@tut.by&quot;
@@ -42,55 +41,55 @@
                         cd devopstraining
                         ./gradlew incrementVersion
                         ./gradlew build
-                        export ver=$(cat gradle.properties | grep version= | sed &apos;s/version=//&apos;)
-                        curl -XPUT -u admin:admin123 -T build/libs/devopstraining-$ver.war http://server1:8081/nexus/content/repositories/snapshots/task6/$ver/test.war
-                        
                     &apos;&apos;&apos;
                     script { 
-                    VERs = readFile(&apos;./devopstraining/gradle.properties&apos;)
-                    String version=VERs.drop(VERs.lastIndexOf(&apos;=&apos;)+1)
-                    echo &quot;${VERs}!&quot;
-                    echo &quot;${version}&quot;
-                    env.ver = &quot;${version}&quot;
+                        VERs = readFile(&apos;./devopstraining/gradle.properties&apos;)
+                        String version=VERs.drop(VERs.lastIndexOf(&apos;=&apos;)+1)
+                        echo &quot;${version}&quot;
+                        env.ver = &quot;${version}&quot;
                     }
+                    sh &apos;curl -XPUT -u admin:admin123 -T ./devopstraining/build/libs/devopstraining-$ver.war http://server1:8081/nexus/content/repositories/snapshots/task7/$ver/test.war&apos;
                 }
                 
             }
         }
         
-        stage(&apos;Deploy1&apos;) {
+        stage(&apos;Docker build and publish&apos;) {
             steps {
-                node(&apos;tomcat1&apos;){
-                    
+                node(&apos;master&apos;){
                     sh &apos;&apos;&apos;
-                        rm -rf *
                         echo $ver
-                        wget http://server1:8081/nexus/content/repositories/snapshots/task6/$ver/test.war
-                        curl http://server1/jkmanager?cmd=update&amp;from=list&amp;w=lb&amp;sw=server2&amp;vwa=1
-                        cp test.war /var/lib/tomcat/webapps
-                        sleep 5s
-                        curl http://server2:8080/test/index.jsp
-                        curl http://server1/jkmanager?cmd=update&amp;from=list&amp;w=lb&amp;sw=server2&amp;vwa=0
+                        cd ./devopstraining
+                        #sudo docker run -d -p 5000:5000 --name registry registry:2
+                        sudo docker build --build-arg version=$ver --tag=mytomcat .
+                        sudo docker image tag mytomcat localhost:5000/task7:$ver
+                        sudo docker push localhost:5000/task7:$ver
+                        if [ -z $(sudo docker service ls | grep myserv) ]; then
+                            # sudo docker swarm init
+                            sudo docker service create --replicas 2 --name myserv -p 4000:8080 localhost:5000/task7:$ver
+                        else
+                            sudo docker service update --image localhost:5000/task7:$ver myserv
+                        fi
+
+                        #sudo docker swarm init 
+                        #sudo docker run -d -p 4000:8080 localhost:5000/task7:$ver
+                        #sudo docker container stop registry &amp;&amp; sudo docker container rm -v registry
                     &apos;&apos;&apos;
+                }
+                                
+            }
+        }
+        
+        stage (&apos;Check url&apos;) {
+            steps {
+                node (&apos;master&apos;) {
+                    script {
+                        httpRequest acceptType: &apos;TEXT_HTML&apos;, consoleLogResponseBody: true, url: &apos;http://192.168.0.10:4000/test&apos;
+                    }    
                 }
             }
         }
         
-        stage(&apos;Deploy2&apos;) {
-            steps {
-                node(&apos;tomcat2&apos;){
-                    sh &apos;&apos;&apos;
-                        rm -rf *
-                        wget http://server1:8081/nexus/content/repositories/snapshots/task6/$ver/test.war
-                        curl http://server1/jkmanager?cmd=update&amp;from=list&amp;w=lb&amp;sw=server3&amp;vwa=1
-                        cp test.war /var/lib/tomcat/webapps
-                        sleep 5s
-                        curl http://server3:8080/test/index.jsp
-                        curl http://server1/jkmanager?cmd=update&amp;from=list&amp;w=lb&amp;sw=server3&amp;vwa=0
-                    &apos;&apos;&apos;
-                }
-            }
-        }
         
         stage (&apos;Git push&apos;) {
             steps {
@@ -102,7 +101,7 @@
                     git commit -a -m &quot;Update version&quot;
                     git push
                     git checkout master
-                    git merge task6
+                    git merge task7
                     git push
                     git tag -a $ver -m &apos;version&apos;
                     git push origin $ver
@@ -110,9 +109,9 @@
                 }
             }
         }
+        
     }
-}
-</script>
+}</script>
     <sandbox>true</sandbox>
   </definition>
   <triggers/>
