@@ -71,7 +71,6 @@
                             sudo docker service update --image localhost:5000/task7:$ver myserv
                         fi
 
-                        #sudo docker swarm init 
                         #sudo docker run -d -p 4000:8080 localhost:5000/task7:$ver
                         #sudo docker container stop registry &amp;&amp; sudo docker container rm -v registry
                     &apos;&apos;&apos;
