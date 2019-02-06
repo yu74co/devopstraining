@@ -1,2 +1,0 @@
-# devopstraining
-first commit
